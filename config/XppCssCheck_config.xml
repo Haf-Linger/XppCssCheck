@@ -1,17 +1,269 @@
 <xppcsscheck>
 	<properties>
 		<property>
+			<name>border</name>
+			<value>(%linewidth% %linestyle% %color%)|inherit</value>
+		</property>
+		<property>
 			<name>border-color</name>
-			<value>%color%</value>
+			<value>%color%|inherit</value>
+		</property>
+		<property>
+			<name>border-radius</name>
+			<value>%length%|inherit</value>
+		</property>
+		<property>
+			<name>border-style</name>
+			<value>%linestyle%|inherit</value>
+		</property>
+		<property>
+			<name>border-width</name>
+			<value>%linewidth%|inherit</value>
+		</property>
+		<property>
+			<name>box-decoration-break</name>
+			<value>slice|clone</value>
+		</property>
+		<property>
+			<name>color</name>
+			<value>%color%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>content</name>
+			<value>normal|none|%string%|%url%|counter(%counter-name%[,%number-style%])|counters(%counter-name%[,%string%[%number-style%])|%attr%|open-quote|close-quote|no-open-quote|no-close-quote|-xpp-macro(%macro-name[,%arg%])|-xpp-perl(%perl_expression%)|-xpp-perl-mfrag(%perl_expression%|-xpp-xref-mark|-xpp-xref-refer|inherit</value>
+		</property>
+		<property>
+			<name>counter-increment</name>
+			<value>(%counter-name% %integer%)|none|inherit</value>
+		</property>
+		<property>
+			<name>counter-reset</name>
+			<value>(%counter-name% %integer%)|none|inherit</value>
 		</property>
 		<property>
 			<name>display</name>
 			<value>none|inline|block|-xpp-line|-xpp-line-suppress|-xpp-block|-xpp-page|-xpp-macro|-xpp-word|-xpp-word-suppress|list-item</value>
 		</property>
 		<property>
-			<name>font-height</name>
-			<value>%length%|%number%|%attr%|inherit</value>
-		</property>	
+			<name>font-family</name>
+			<value>(%family-name%, %generic-family%)|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>font-size</name>
+			<value>%length%|%number%|%attr%|xx-small|x-small|small|medium|large|x-large|xx-large|smaller|larger|inherit</value>
+		</property>
+		<property>
+			<name>font-style</name>
+			<value>italic|oblique|normal|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>font-variant</name>
+			<value>normal|small-caps|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>font-weight</name>
+			<value>normal|bold|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>line-height</name>
+			<value>normal|%length%|%number%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>list-style-image</name>
+			<value>%url%|none|inherit</value>
+		</property>
+		<property>
+			<name>list-style-position</name>
+			<value>inside|outside|inherit</value>
+		</property>
+		<property>
+			<name>list-style-type</name>
+			<value>disc|circle|square|%number-style%|none|inherit</value>
+		</property>
+		<property>
+			<name>margin</name>
+			<!--BART-->
+			<value>margin-top margin-right margin-bottom margin-left</value>
+		</property>
+		<property>
+			<name>margin-bottom</name>
+			<value>%length%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>c</name>
+			<value>%length%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>margin-right</name>
+			<value>%length%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>margin-top</name>
+			<value>%length%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>padding</name>
+			<!--BART-->
+			<value>(padding-top padding-right padding-bottom padding-left)|inherit</value>
+		</property>
+		<property>
+			<name>padding-bottom</name>
+			<value>%length%|inherit</value>
+		</property>
+		<property>
+			<name>padding-left</name>
+			<value>%length%|inherit</value>
+		</property>
+		<property>
+			<name>padding-right</name>
+			<value>%length%|inherit</value>
+		</property>
+		<property>
+			<name>padding-top</name>
+			<value>%length%|inherit</value>
+		</property>
+		<property>
+			<name>page</name>
+			<value>auto|%string%</value>
+		</property>
+		<property>
+			<name>quote</name>
+			<value>%string%|none|inherit</value>
+		</property>
+		<property>
+			<name>text-align</name>
+			<value>left|center|right|justify%attr%|-xpp-justify-last-line-left|-xpp-justify-last-line-center|-xpp-justify-last-line-right|-xpp-justify-last-line-left-no-return|-xpp-justify-last-line-center-no-return|-xpp-justify-last-line-right-no-return|-xpp-ragged-left|-xpp-ragged-center|-xpp-ragged-right|-xpp-ragged-left-no-return|-xpp-ragged-center-no-return|-xpp-ragged-right-no-return|-xpp-justify-last-line-appropriate|-xpp-ragged-appropriate|inherit|</value>
+		</property>
+		<property>
+			<name>text-indent</name>
+			<value>%length%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>text-transform</name>
+			<value>uppercase|lowercase|none|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>vertical-align</name>
+			<value>%length%|sub|super|baseline|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>width</name>
+			<value>%length%|auto|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-border-alt-color</name>
+			<value>%color%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-border-fill-pattern</name>
+			<!--BART-->
+			<value>0-65535|none|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-export-class</name>
+			<value>%string%|none</value>
+		</property>
+		<property>
+			<name>-xpp-ascender-lead</name>
+			<value>%length%|none|normal|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-descender-lead</name>
+			<value>%length%|none|normal|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-extra-lead</name>
+			<value>%length%|none|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-font-width</name>
+			<value>%length%|same|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-hj-table</name>
+			<value>%integer%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-hung-punc-table</name>
+			<value>%integer%|none|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-hyphenation-language</name>
+			<value>%integer%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-kerning-track</name>
+			<!--BART-->
+			<value>1...4|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-lines-above-accept</name>
+			<value>%integer%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-lines-above-preferred</name>
+			<value>%integer%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-lines-below-accept</name>
+			<value>%integer%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-lines-below-preferred</name>
+			<value>%integer%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-margin-top-keep</name>
+			<value>yes|no|auto|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-max-lead-expansion</name>
+			<value>%length%|none|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-page-column-rule</name>
+			<value>%integer%|span|normal|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-page-style-table</name>
+			<value>%integer%|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-pair-kerning</name>
+			<value>yes|no|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-pattern</name>
+			<value>%integer%|normal|none|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-text-set</name>
+			<!--BART-->
+			<value>1...255|none|%attr%</value>
+		</property>
+		<property>
+			<name>-xpp-underline-style</name>
+			<!--BART-->
+			<value>1...10|none|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-vertical-band-priority</name>
+			<!--BART-->
+			<value>1...10|none|%attr%|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-widow-type</name>
+			<value>none|head|para|inherit</value>
+		</property>
+		<property>
+			<name>-xpp-xref-mark</name>
+			<value>%string%|%attr%|none</value>
+		</property>
+		<property>
+			<name>-xpp-xref-refer</name>
+			<!--BART-->
+			<value>%xref-name% %xref-type% %xref-occur% %xref-xreg%</value>
+		</property>
 	</properties>
 	<values>
 		<value>
@@ -20,15 +272,79 @@
 		</value>
 		<value>
 			<name>color</name>
-			<pattern>black|white|red|green|blue|cyan|magenta|yellow|inherit</pattern>
+			<pattern>black|white|red|green|blue|cyan|magenta|yellow|-xppc\(\d+\)</pattern>
+		</value>
+		<value>
+			<name>counter-name</name>
+			<!--BART-->
+			<pattern>1st no digit, alphanumberic characters, hyphen, underscore</pattern>
+		</value>
+		<value>
+			<name>family-name</name>
+			<!--BART-->
+			<pattern>A prioritized list of font family names and/or generic family names. If a font name contains white space it must be quoted</pattern>
+		</value>
+		<value>
+			<name>integer</name>
+			<pattern>BART</pattern>
 		</value>
 		<value>
 			<name>length</name>
 			<pattern>\d+(\.\d+)?(px|%|co|do|em|ex|in|cm|mm|pt|pc)</pattern>
 		</value>
 		<value>
+			<name>linestyle</name>
+			<pattern>none|dotted|dashed|solid|double|-xpp-dot11|-xpp-dot12|-xpp-dot13|-xpp-dot14|-xpp-dsh11|-xpp-dsh12|-xpp-dsh13|-xpp-dsh21|-xpp-dsh22|-xpp-dsh23|-xpp-dsh31|-xpp-dsh32|-xpp-dsh33|-xpp-dbl111|-xpp-dbl121|-xpp-dbl131|-xpp-dbl122|-xpp-dbl221|-xpp-dbl212|-xpp-dbl112|-xpp-dbl211</pattern>
+		</value>
+		<value>
+			<name>linewidth</name>
+			<pattern>medium|thin|thick|%length%</pattern>
+		</value>
+		<value>
+			<name>macro-name</name>
+			<!--BART-->
+			<pattern>64 characters, alpha, hyphen, underscore</pattern>
+		</value>
+		<value>
 			<name>number</name>
 			<pattern>\d+</pattern>
-		</value>	
+		</value>
+		<value>
+			<name>perl_expression</name>
+			<pattern>BART</pattern>
+		</value>
+		<value>
+			<name>string</name>
+			<pattern>BART</pattern>
+		</value>
+		<value>
+			<name>number-style</name>
+			<!--BART-->
+			<pattern>decimal|decimal-leading-zero|lower-roman|upper-roman|lower-greek|lower-latin|upper-latin|armenian|georgian|lower-alpha|upper-alpha|-xpp-ans|-xpp-anss|-xpp-anzz|-xpp-lower-aio|-xpp-upper-aio|-xpp-ia|-xpp-ias|-xpp-iass -xpp-iaz|-xpp-iazz|-xpp-ie|-xpp-ies|-xpp-iess|-xpp-iez|-xpp-iezz|-xpp-id|-xpp-ids|-xpp-idss|-xpp-idz|-xpp-idzz</pattern>
+		</value>
+		<value>
+			<name>url</name>
+			<pattern>BART</pattern>
+		</value>
+		<value>
+			<name>xref-name</name>
+			<!--BART-->
+			<pattern>%string%|%attr%|name</pattern>
+		</value>
+		<value>
+			<name>xref-occur</name>
+			<!--BART-->
+			<pattern>this|first|prev|last</pattern>
+		</value>
+		<value>
+			<name>xref-type</name>
+			<!--BART-->
+			<pattern>spot|story|foot|pick</pattern>
+		</value>
+		<value>
+			<name>xref-xreg</name>
+			<!--BART-->
+			<pattern>1001-8744|none</pattern>
+		</value>
 	</values>
 </xppcsscheck>
