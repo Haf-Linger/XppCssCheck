@@ -17,9 +17,11 @@ use XML::Simple;
 use Data::Dumper;
 
 #some variables
+my $Css;
 my $Config;
 my $Debug = 5;
 my $ErrorNr = 0;
+my @Properties;
 my $Rules;
 my $WarningNr = 0;
 
@@ -69,6 +71,25 @@ sub addWarning {
 
 	return;
 }
+
+#-------------------------------------------------------------
+sub checkPropertyValue {
+#-------------------------------------------------------------
+	my $ruleNr = shift;
+	my $declarations = shift;
+	my $declarationsTot = scalar(@{$declarations}) - 1;
+	for my $declarationNr (1 .. $declarationsTot) {
+		message(" CSS rule $ruleNr", 8);
+		my $lineNr = $declarations->[$declarationNr]->{'lineNr'};
+		my $property = $declarations->[$declarationNr]->{'property'};
+		message("  property: $property", 8);
+		checkProperty($property, $lineNr);
+		
+		my $value = $declarations->[$declarationNr]->{'value'};
+		message("  value: $value", 8);
+	}
+}
+
 #-------------------------------------------------------------
 sub checkSelector {
 #-------------------------------------------------------------
@@ -150,7 +171,8 @@ sub preFlight {
 	}
 	
 	#read config file
-	$Config = eval { XMLin($config) };
+	message("-reading config file",1);
+	$Config = eval { XMLin($config->canonpath, KeyAttr => ['name']) };
 	if ($@) {
 		message("config file error: file corrupt\n  see: <$config>\n$@\n");
 		exit(-1);
@@ -159,6 +181,12 @@ sub preFlight {
 		print Dumper($Config);
 	}
 	
+	#create @Properties
+	foreach my $property (keys %{$Config->{'properties'}->{'property'}} ) {
+		push @Properties, $property;
+	}
+	my $properties = scalar(@Properties);
+	message(" $properties CSS properties found in config file", 1);
 	return($file);
 }
 
@@ -179,8 +207,8 @@ sub printAtRules {
 		for my $ruleNr ( 1 .. $rules ) {
 			my $statement = stripWS($Rules->{'at'}->[$ruleNr]->{'rule'});
 			my $selector = stripWS($Rules->{'css'}->[$ruleNr]->{'selector'});
-			message("rule $ruleNr", $Debug);
-			message(" statement:  $statement", $Debug);
+			message("  ATrule $ruleNr", $Debug);
+			message("   statement:  $statement", $Debug);
 		}	
 	}
 	
@@ -197,9 +225,9 @@ sub printCssRules {
 		for my $ruleNr ( 1 .. $rules ) {
 			my $declarations = stripWS($Rules->{'css'}->[$ruleNr]->{'rule'});
 			my $selector = stripWS($Rules->{'css'}->[$ruleNr]->{'selector'});
-			message("rule $ruleNr", $Debug);
-			message(" selector:  $selector", $Debug);
-			message(" declarations:  $declarations", $Debug);
+			message("  CSS rule $ruleNr", $Debug);
+			message("   selector:  $selector", $Debug);
+			message("   declarations:  $declarations", $Debug);
 		}	
 	}
 	
@@ -235,16 +263,97 @@ sub printWarnings {
 }
 
 #-------------------------------------------------------------
-sub readConfig {
-#-------------------------------------------------------------
-	
-}
-#-------------------------------------------------------------
 sub readFile {
 #-------------------------------------------------------------
 	my $file = path(shift);
 	message("-reading CSS file $file",1);
 	my $css = $file->slurp_utf8;
+
+	return($css);
+}
+
+#-------------------------------------------------------------
+sub scanCssRules {
+#-------------------------------------------------------------
+	my $rules = scalar(@{$Rules->{'css'}}) - 1;
+	return if ($rules < 0);
+	message("-parsing CSS rules",1);
+	for my $ruleNr (1 .. $rules) {
+		my $selector = $Rules->{'css'}->[$ruleNr]->{'selector'};
+		checkSelector($selector, $ruleNr);
+		my $declarations = $Rules->{'css'}->[$ruleNr]->{'rule'};
+		scanCssDeclarations($declarations, $ruleNr);
+		checkPropertyValue($ruleNr, $Rules->{'css'}->[$ruleNr]->{'declarations'});
+	}
+	
+	return;
+}
+
+#-------------------------------------------------------------
+sub scanCssDeclarations {
+#-------------------------------------------------------------
+	my $css = shift;
+	my $ruleNr = shift;
+	my $declarationNr = 0;
+	my $lineNr = $Rules->{'css'}->[$ruleNr]->{'lineNr'};
+	my $inQuote = 0;
+	my $inProperty = 1;
+	my $inValue = 0;
+	my $string = "";
+	#; at end of block is optional
+	$css .= ';' unless ($css =~ m/;$/);
+	#scan
+	my $length = length($css);
+	#C-style for loop 
+	for ( my $i = 0; $i < $length; $i++ ) {
+		my $chr = substr $css, $i, 1;
+		#line counter
+		if ( $chr eq "\n" ) { 
+			$lineNr++;
+			$string .= $chr;
+		}
+		#quoted strings
+		elsif ( $inQuote and $chr eq '"' ) {
+			$inQuote = 0;
+			$string .= $chr;			
+		}
+		elsif ( $chr eq '"' ) {
+			$inQuote = 1;
+			$string .= $chr;					
+		}
+		elsif ( $inQuote ) {
+			$string .= $chr;
+			if (length($string) > 1024) {
+				addWarning($lineNr, "string too long - end quote might be missing");
+			}
+		}
+		elsif ($chr eq ':' and $inValue) {
+			addError($lineNr, "syntax error - ':' found in value definition: $string");
+		}
+		elsif ($chr eq ':') {
+			$declarationNr++;
+			$Rules->{'css'}->[$ruleNr]->{'declarations'}->[$declarationNr]->{'property'} = stripWS($string);
+			$Rules->{'css'}->[$ruleNr]->{'declarations'}->[$declarationNr]->{'lineNr'} = $lineNr;
+			$inValue = 1;
+			$inProperty = 0;
+			$string = "";
+		}
+		elsif ($chr eq ';' and $inProperty) {
+			addError($lineNr, "syntax error - ';' found in property definition: $string");
+		}
+		elsif ($chr eq ';') {
+			$Rules->{'css'}->[$ruleNr]->{'declarations'}->[$declarationNr]->{'value'} = stripWS($string);
+			$inProperty = 1;
+			$inValue = 0;
+			$string = "";
+		}
+		else {
+			$string .= $chr;
+		}		
+	}
+	if ($inValue) {
+		addError($lineNr, "syntax error - missing ';' found in definition: $string");
+	}
 
 	return($css);
 }
@@ -279,7 +388,7 @@ sub scanForRules {
 			my $chrNext = substr $css, $i+1, 1;
 			if ( $chrNext eq '*' ) {
 				$inComment = 1;
-				message(" line: $lineNr \tstart of comment", 7);				
+				message(" line: $lineNr - start of comment", 7);				
 			} else {
 				$string .= $chr;
 			}			
@@ -290,7 +399,7 @@ sub scanForRules {
 			if ( $chrNext eq '/' ) {
 				$inComment = 0;
 				$i++;
-				message(" line: $lineNr \t end of comment", 7);				
+				message("  line: $lineNr - end of comment", 7);				
 			}		
 		}
 		elsif ( $inComment ) {
@@ -308,25 +417,21 @@ sub scanForRules {
 		elsif ( $inQuote ) {
 			$string .= $chr;
 			if (length($string) > 1024) {
-				$WarningNr++;
-				$Rules->{'warnings'}->[$WarningNr] = "WARNING line: $lineNr - string too long - end quote might be missing";
+				addWarning($lineNr, "string too long - end quote might be missing");
 			}
 		}
 		#at and css rules: illegal start
 		elsif ( $inRule and ($chr eq '@' or $chr eq '{') ) {
-			$ErrorNr++;
 			my $ruleLineNr = $Rules->{$inRule}->[$currentRuleNr]->{'lineNr'};
-			$Rules->{'errors'}->[$ErrorNr] = "ERROR line: $ruleLineNr - open statement not ended";
-			
-			$ErrorNr++;
-			$Rules->{'errors'}->[$ErrorNr] = "ERROR line: $lineNr - illegal start of statement found $chr";
+			addError($ruleLineNr, "open statement not ended");
+			addError($lineNr, "illegal start of statement found $chr");
 		}
 		#at-rule: start
 		elsif ( $chr eq '@' ) {
 			$atRuleNr++;
 			$currentRuleNr = $atRuleNr;
 			$inRule = 'at';
-			message(" line: $lineNr \tstart of at-rule $currentRuleNr", 7);
+			message(" line: $lineNr - start of at-rule $currentRuleNr", 7);
 			$Rules->{$inRule}->[$currentRuleNr]->{'lineNr'} = $lineNr;
 			$terminator = ';';
 			$string = "";
@@ -336,7 +441,7 @@ sub scanForRules {
 			$cssRuleNr++;
 			$currentRuleNr = $cssRuleNr;
 			$inRule = 'css';
-			message(" line: $lineNr \tstart of css-rule $currentRuleNr", 7);
+			message(" line: $lineNr - start of css-rule $currentRuleNr", 7);
 			$Rules->{$inRule}->[$currentRuleNr]->{'lineNr'} = $lineNr;
 			$Rules->{$inRule}->[$currentRuleNr]->{'selector'} = $string;
 			$terminator = '}';
@@ -344,16 +449,15 @@ sub scanForRules {
 		} 
 		#at and css rules: legal end
 		elsif ( $inRule and ($chr eq $terminator) ) {
-			message(" line: $lineNr \t end of ${inRule}-rule $currentRuleNr", 7);
-			$Rules->{$inRule}->[$currentRuleNr]->{'rule'} = $string;
+			message("  line: $lineNr - end of ${inRule}-rule $currentRuleNr", 7);
+			$Rules->{$inRule}->[$currentRuleNr]->{'rule'} = stripWS($string);
 			$string = "";
 			$terminator = ";|}";
 			$inRule = "";
 		}
 		#at and css rules: illegal end
 		elsif ( $chr =~ m/$terminator/ ) {
-			$ErrorNr++;
-			$Rules->{'errors'}->[$ErrorNr] = "ERROR line: $lineNr - illegal end of statement found $chr ";
+			addError($lineNr, "illegal end of statement found $chr");
 		}
 		#normal character
 		else {
@@ -364,20 +468,6 @@ sub scanForRules {
 	return;
 }
 
-#-------------------------------------------------------------
-sub scanCssRules {
-#-------------------------------------------------------------
-	my $rules = scalar(@{$Rules->{'css'}}) - 1;
-	return if ($rules < 0);
-	message("-parsing CSS rules",1);
-	for my $ruleNr (1 .. $rules) {
-		my $selector = $Rules->{'css'}->[$ruleNr]->{'selector'};
-		checkSelector($selector, $ruleNr);
-		my $rule = $Rules->{'css'}->[$ruleNr]->{'rule'};
-	
-	
-	}
-}
 
 #-------------------------------------------------------------
 sub stripWS {
@@ -388,11 +478,4 @@ sub stripWS {
 	return $string;
 }
 
-#-------------------------------------------------------------
-sub validateAT {
-#-------------------------------------------------------------
-	my $ruleNr = shift;
-
-	return();
-}
 
