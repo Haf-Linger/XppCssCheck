@@ -9,3 +9,26 @@ p {
 	display: block;
 	margin-top: 5pt;
 }
+
+p:before {
+		content: "{text}";
+	
+}
+
+p:firsttype {
+	color: red;
+}
+
+math\:p {
+	color: green;
+}
+
+p.important {
+	font-family: serif;	
+}
+
+h1:selected,
+h2,
+p[color="red"] {
+	color: attr(color);	
+}
