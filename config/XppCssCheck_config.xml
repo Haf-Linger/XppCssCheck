@@ -1,0 +1,34 @@
+<xppcsscheck>
+	<properties>
+		<property>
+			<name>border-color</name>
+			<value>%color%</value>
+		</property>
+		<property>
+			<name>display</name>
+			<value>none|inline|block|-xpp-line|-xpp-line-suppress|-xpp-block|-xpp-page|-xpp-macro|-xpp-word|-xpp-word-suppress|list-item</value>
+		</property>
+		<property>
+			<name>font-height</name>
+			<value>%length%|%number%|%attr%|inherit</value>
+		</property>	
+	</properties>
+	<values>
+		<value>
+			<name>attr</name>
+			<pattern>attr\(\w+\)</pattern>
+		</value>
+		<value>
+			<name>color</name>
+			<pattern>black|white|red|green|blue|cyan|magenta|yellow|inherit</pattern>
+		</value>
+		<value>
+			<name>length</name>
+			<pattern>\d+(\.\d+)?(px|%|co|do|em|ex|in|cm|mm|pt|pc)</pattern>
+		</value>
+		<value>
+			<name>number</name>
+			<pattern>\d+</pattern>
+		</value>	
+	</values>
+</xppcsscheck>

@@ -1,5 +1,8 @@
+
+@import url(xpp.css);
+/* comment */
 html {
-	font-size: 10pt;
+	font-height: 10pt;
 }
 
 p {
