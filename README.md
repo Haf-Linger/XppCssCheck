@@ -76,7 +76,7 @@ Et Voila, you are done.
 * no support for Paged Media rules (yet)
 * tool only checks the current open CSS file. It does not chase down nor check imported stylesheets.
 
-## Author
+## Authors
 tool: Bart Terryn - XP2 - bart@xp2.be  
 config file: Tine Philippart - XP2 - tine@xp2.be
 
