@@ -21,7 +21,7 @@ my $Css;
 my $Config;
 my $Debug = 5;
 my $ErrorNr = 0;
-my @Properties;
+my $Properties;
 my $Rules;
 my $WarningNr = 0;
 
@@ -75,6 +75,24 @@ sub addWarning {
 #-------------------------------------------------------------
 sub checkPropertyValue {
 #-------------------------------------------------------------
+	my $lineNr = shift;
+	my $property = shift;
+	my $value = shift;
+	if ( exists $Properties->{$property} ) {
+		my $short = $Properties->{$property}->{'short'};
+		my $long = $Properties->{$property}->{'long'};
+		unless ($value =~ m/^$long$/) {
+			addWarning($lineNr, "in property '$property' the value '$value' did not parse pattern '$short'");
+		}
+	} else {
+		addWarning($lineNr, "unsupported property '$property'");
+	}
+	return();
+}
+
+#-------------------------------------------------------------
+sub checkDeclarations {
+#-------------------------------------------------------------
 	my $ruleNr = shift;
 	my $declarations = shift;
 	my $declarationsTot = scalar(@{$declarations}) - 1;
@@ -82,11 +100,11 @@ sub checkPropertyValue {
 		message(" CSS rule $ruleNr", 8);
 		my $lineNr = $declarations->[$declarationNr]->{'lineNr'};
 		my $property = $declarations->[$declarationNr]->{'property'};
-		message("  property: $property", 8);
-		checkProperty($property, $lineNr);
-		
 		my $value = $declarations->[$declarationNr]->{'value'};
+		message("  property: $property", 8);
 		message("  value: $value", 8);
+		checkPropertyValue($lineNr, $property, $value);
+		
 	}
 }
 
@@ -182,14 +200,32 @@ sub preFlight {
 	}
 	
 	#create @Properties
-	foreach my $property (keys %{$Config->{'properties'}->{'property'}} ) {
-		push @Properties, $property;
+	foreach my $property ( keys %{$Config->{'properties'}->{'property'}} ) {
+		my $value = $Config->{'properties'}->{'property'}->{$property}->{'value'};
+		$Properties->{$property}->{'short'} = $value;
+		#expand recursively
+		1 while ( $value =~ s/%([\w-]+)%/propertyExpand($1)/e );
+		#store
+		$Properties->{$property}->{'long'} = $value;
+		message(" property: $property - value: $value", 9);
 	}
-	my $properties = scalar(@Properties);
+	my $properties = scalar(keys %{$Properties});
 	message(" $properties CSS properties found in config file", 1);
 	return($file);
 }
 
+#-------------------------------------------------------------
+sub propertyExpand {
+#-------------------------------------------------------------
+	my $value = shift;
+	if ( exists $Config->{'values'}->{'value'}->{$value} ) {
+		return( $Config->{'values'}->{'value'}->{$value}->{'pattern'} )
+	} else {
+		message("config file error: pattern for value '$value' is not defined",0);
+		exit(-1);
+	}
+
+}
 #-------------------------------------------------------------
 sub progName {
 #-------------------------------------------------------------
@@ -283,7 +319,7 @@ sub scanCssRules {
 		checkSelector($selector, $ruleNr);
 		my $declarations = $Rules->{'css'}->[$ruleNr]->{'rule'};
 		scanCssDeclarations($declarations, $ruleNr);
-		checkPropertyValue($ruleNr, $Rules->{'css'}->[$ruleNr]->{'declarations'});
+		checkDeclarations($ruleNr, $Rules->{'css'}->[$ruleNr]->{'declarations'});
 	}
 	
 	return;

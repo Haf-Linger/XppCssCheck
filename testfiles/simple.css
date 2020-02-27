@@ -7,7 +7,7 @@ html {
 
 p {
 	display: block;
-	margin-top: 5pt;
+	margin-top: 5p;
 }
 
 p:before {
@@ -17,6 +17,7 @@ p:before {
 
 p:firsttype {
 	color: red;
+	width: 5.10p;
 }
 
 math\:p {
