@@ -30,15 +30,15 @@
 		</property>
 		<property>
 			<name>content</name>
-			<value>normal|none|%string%|%url%|counter(%counter-name%[,%number-style%])|counters(%counter-name%[,%string%[%number-style%])|%attr%|open-quote|close-quote|no-open-quote|no-close-quote|-xpp-macro(%macro-name[,%arg%])|-xpp-perl(%perl_expression%)|-xpp-perl-mfrag(%perl_expression%|-xpp-xref-mark|-xpp-xref-refer|inherit</value>
+			<value>normal|none|inherit|(%string%|%url%|counter(%name%\(,\s*%number-style%)?\)|counters\(%name%(,\s*%string%(,\s*%number-style%)?)?\)|%attr%|open-quote|close-quote|no-open-quote|no-close-quote|-xpp-macro\(%macro-name%(,\s+%expression%)?\)|-xpp-perl\(%expression%\)|-xpp-perl-mfrag\(%expression%\)|-xpp-xref-mark|-xpp-xref-refer|\s+)+</value>
 		</property>
 		<property>
 			<name>counter-increment</name>
-			<value>(%counter-name% %integer%)|none|inherit</value>
+			<value>(%name%(\s+%integer%)?)|none|inherit</value>
 		</property>
 		<property>
 			<name>counter-reset</name>
-			<value>(%counter-name% %integer%)|none|inherit</value>
+			<value>(%name%(\s+%integer%)?)|none|inherit</value>
 		</property>
 		<property>
 			<name>display</name>
@@ -46,7 +46,7 @@
 		</property>
 		<property>
 			<name>font-family</name>
-			<value>(%family-name%, %generic-family%)|%attr%|inherit</value>
+			<value>(%family-name%(,\s+%family-name%)*)|%attr%|inherit</value>
 		</property>
 		<property>
 			<name>font-size</name>
@@ -82,29 +82,27 @@
 		</property>
 		<property>
 			<name>margin</name>
-			<!--BART-->
-			<value>margin-top margin-right margin-bottom margin-left</value>
+			<value>%margin%(\s+%margin%\s+%margin%\s+%margin%)?</value>
 		</property>
 		<property>
 			<name>margin-bottom</name>
-			<value>%length%|%attr%|inherit</value>
+			<value>%margin%</value>
 		</property>
 		<property>
-			<name>c</name>
-			<value>%length%|%attr%|inherit</value>
+			<name>margin-left</name>
+			<value>%margin%</value>
 		</property>
 		<property>
 			<name>margin-right</name>
-			<value>%length%|%attr%|inherit</value>
+			<value>%margin%</value>
 		</property>
 		<property>
 			<name>margin-top</name>
-			<value>%length%|%attr%|inherit</value>
+			<value>%margin%</value>
 		</property>
 		<property>
 			<name>padding</name>
-			<!--BART-->
-			<value>(padding-top padding-right padding-bottom padding-left)|inherit</value>
+			<value>(%length%\s+%length%\s+%length%\s+%length%)|inherit</value>
 		</property>
 		<property>
 			<name>padding-bottom</name>
@@ -124,10 +122,10 @@
 		</property>
 		<property>
 			<name>page</name>
-			<value>auto|%string%</value>
+			<value>auto|%word%</value>
 		</property>
 		<property>
-			<name>quote</name>
+			<name>quotes</name>
 			<value>%string%|none|inherit</value>
 		</property>
 		<property>
@@ -136,7 +134,7 @@
 		</property>
 		<property>
 			<name>text-indent</name>
-			<value>%length%|%attr%|inherit</value>
+			<value>%negative%|%length%|%attr%|inherit</value>
 		</property>
 		<property>
 			<name>text-transform</name>
@@ -156,8 +154,7 @@
 		</property>
 		<property>
 			<name>-xpp-border-fill-pattern</name>
-			<!--BART-->
-			<value>0-65535|none|inherit</value>
+			<value>%integer%|none|inherit</value>
 		</property>
 		<property>
 			<name>-xpp-export-class</name>
@@ -193,8 +190,7 @@
 		</property>
 		<property>
 			<name>-xpp-kerning-track</name>
-			<!--BART-->
-			<value>1...4|%attr%|inherit</value>
+			<value>[1234]|%attr%|inherit</value>
 		</property>
 		<property>
 			<name>-xpp-lines-above-accept</name>
@@ -237,19 +233,44 @@
 			<value>%integer%|normal|none|%attr%|inherit</value>
 		</property>
 		<property>
+			<name>-xpp-pdf-annotation</name>
+			<value>%string%|none</value>
+		</property>
+		<property>
+			<name>-xpp-pdf-annotation-options</name>
+			<value>%string%|none</value>
+		</property>
+		<property>
+			<name>-xpp-pdf-bookmark</name>
+			<value>%string%|none</value>
+		</property>
+		<property>
+			<name>-xpp-pdf-bookmark-options</name>
+			<value>%string%|none</value>
+		</property>
+		<property>
+			<name>-xpp-pdf-docinfo-options</name>
+			<value>%string%|none</value>
+		</property>
+		<property>
+			<name>-xpp-pdf-tag</name>
+			<value>%string%|none</value>
+		</property>
+		<property>
+			<name>-xpp-pdf-tag-options</name>
+			<value>%string%|none</value>
+		</property>
+		<property>
 			<name>-xpp-text-set</name>
-			<!--BART-->
-			<value>1...255|none|%attr%</value>
+			<value>%integer%|none|%attr%</value>
 		</property>
 		<property>
 			<name>-xpp-underline-style</name>
-			<!--BART-->
-			<value>1...10|none|%attr%|inherit</value>
+			<value>%ten%|none|%attr%|inherit</value>
 		</property>
 		<property>
 			<name>-xpp-vertical-band-priority</name>
-			<!--BART-->
-			<value>1...10|none|%attr%|inherit</value>
+			<value>%ten%|none|%attr%|inherit</value>
 		</property>
 		<property>
 			<name>-xpp-widow-type</name>
@@ -257,12 +278,11 @@
 		</property>
 		<property>
 			<name>-xpp-xref-mark</name>
-			<value>%string%|%attr%|none</value>
+			<value>%word%|%attr%|none</value>
 		</property>
 		<property>
 			<name>-xpp-xref-refer</name>
-			<!--BART-->
-			<value>%xref-name% %xref-type% %xref-occur% %xref-xreg%</value>
+			<value>%name% %xref-type% %xref-occur% %xref-xreg%</value>
 		</property>
 	</properties>
 	<values>
@@ -272,21 +292,19 @@
 		</value>
 		<value>
 			<name>color</name>
-			<pattern>black|white|red|green|blue|cyan|magenta|yellow|-xppc\(\d+\)</pattern>
+			<pattern>(black|white|red|green|blue|cyan|magenta|yellow|-xppc\(\d+\))</pattern>
 		</value>
 		<value>
-			<name>counter-name</name>
-			<!--BART-->
-			<pattern>1st no digit, alphanumberic characters, hyphen, underscore</pattern>
+			<name>expression</name>
+			<pattern>.+?</pattern>
 		</value>
 		<value>
 			<name>family-name</name>
-			<!--BART-->
-			<pattern>A prioritized list of font family names and/or generic family names. If a font name contains white space it must be quoted</pattern>
+			<pattern>[\w\s-]+</pattern>
 		</value>
 		<value>
 			<name>integer</name>
-			<pattern>BART</pattern>
+			<pattern>\d+</pattern>
 		</value>
 		<value>
 			<name>length</name>
@@ -302,49 +320,59 @@
 		</value>
 		<value>
 			<name>macro-name</name>
-			<!--BART-->
-			<pattern>64 characters, alpha, hyphen, underscore</pattern>
+			<pattern>[\w-]{1,32}</pattern>
+		</value>
+		<value>
+			<name>margin</name>
+			<pattern>0|%length%|%attr%|inherit</pattern>
+		</value>
+		<value>
+			<name>name</name>
+			<pattern>[A-Za-z][\w-]+</pattern>
+		</value>
+		<value>
+			<name>negative</name>
+			<pattern>-\d+(\.\d+)?(px|%|co|do|em|ex|in|cm|mm|pt|pc)</pattern>
 		</value>
 		<value>
 			<name>number</name>
-			<pattern>\d+</pattern>
-		</value>
-		<value>
-			<name>perl_expression</name>
-			<pattern>BART</pattern>
-		</value>
-		<value>
-			<name>string</name>
-			<pattern>BART</pattern>
+			<pattern>\d+(\.\d+)?</pattern>
 		</value>
 		<value>
 			<name>number-style</name>
-			<!--BART-->
 			<pattern>decimal|decimal-leading-zero|lower-roman|upper-roman|lower-greek|lower-latin|upper-latin|armenian|georgian|lower-alpha|upper-alpha|-xpp-ans|-xpp-anss|-xpp-anzz|-xpp-lower-aio|-xpp-upper-aio|-xpp-ia|-xpp-ias|-xpp-iass -xpp-iaz|-xpp-iazz|-xpp-ie|-xpp-ies|-xpp-iess|-xpp-iez|-xpp-iezz|-xpp-id|-xpp-ids|-xpp-idss|-xpp-idz|-xpp-idzz</pattern>
 		</value>
 		<value>
+			<name>string</name>
+			<pattern>["']?.+?["']?</pattern>
+		</value>
+		<value>
+			<name>ten</name>
+			<pattern>([0-9]|10)</pattern>
+		</value>
+		<value>
+			<name>word</name>
+			<pattern>[\w-]+</pattern>
+		</value>
+		<value>
 			<name>url</name>
-			<pattern>BART</pattern>
+			<pattern>url\(%word%\)</pattern>
 		</value>
 		<value>
 			<name>xref-name</name>
-			<!--BART-->
-			<pattern>%string%|%attr%|name</pattern>
+			<pattern>%string%|%attr%|none</pattern>
 		</value>
 		<value>
 			<name>xref-occur</name>
-			<!--BART-->
 			<pattern>this|first|prev|last</pattern>
 		</value>
 		<value>
 			<name>xref-type</name>
-			<!--BART-->
 			<pattern>spot|story|foot|pick</pattern>
 		</value>
 		<value>
 			<name>xref-xreg</name>
-			<!--BART-->
-			<pattern>1001-8744|none</pattern>
+			<pattern>\d{4}|none</pattern>
 		</value>
 	</values>
 </xppcsscheck>

@@ -2,11 +2,11 @@
 @import url(xpp.css);
 /* comment */
 html {
-	font-height: 10pt;
+	font-height: 10pt ;
 }
 
 p {
-	display: block;
+	display:block;
 	margin-top: 5p;
 }
 
@@ -16,8 +16,8 @@ p:before {
 }
 
 p:firsttype {
-	color: red;
-	width: 5.10p;
+	color:         red;
+	width:        5.10p;
 }
 
 math\:p {

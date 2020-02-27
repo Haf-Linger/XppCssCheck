@@ -3,7 +3,8 @@
 #*            this software is licensed under the MIT license                *
 #*****************************************************************************
 # V00.01 - 2020/02/16 - start
-our $Version = "00.01";
+# V00.02 - 2020/02/27 - first version
+our $Version = "00.02";
 
 use strict;
 use warnings;
@@ -22,6 +23,7 @@ my $Config;
 my $Debug = 5;
 my $ErrorNr = 0;
 my $Properties;
+my $ProblemNr = 0;
 my $Rules;
 my $WarningNr = 0;
 
@@ -36,15 +38,16 @@ scanForRules($css);
 printAtRules();
 printCssRules();
 #no need to dig any further - first resolve these errors
-if ($ErrorNr) {
-	printErrors();
+if ($ProblemNr) {
+	printProblems();
 	exit(-1);
 }
 #parse css rules properties and values
 scanCssRules();
 
-printErrors();
-printWarnings();
+#printErrors();
+#printWarnings();
+printProblems();
 
 exit();
 
@@ -56,8 +59,10 @@ sub addError {
 #-------------------------------------------------------------
 	my $lineNr = shift;
 	my $error = shift;
-	$ErrorNr++;
-	$Rules->{'errors'}->[$ErrorNr] = "ERROR line: $lineNr - $error";
+	#$ErrorNr++;
+	#$Rules->{'errors'}->[$ErrorNr] = "ERROR line: $lineNr - $error";
+	$ProblemNr++;
+	$Rules->{'problems'}->[$ProblemNr] = "ERROR line: $lineNr - $error";
 
 	return;
 }
@@ -66,8 +71,10 @@ sub addWarning {
 #-------------------------------------------------------------
 	my $lineNr = shift;
 	my $warning = shift;
-	$WarningNr++;
-	$Rules->{'warnings'}->[$WarningNr] = "WARNING line: $lineNr - $warning";
+	#$WarningNr++;
+	#$Rules->{'warnings'}->[$WarningNr] = "WARNING line: $lineNr - $warning";
+	$ProblemNr++;
+	$Rules->{'problems'}->[$ProblemNr] = "WARNING line: $lineNr - $warning";
 
 	return;
 }
@@ -82,7 +89,7 @@ sub checkPropertyValue {
 		my $short = $Properties->{$property}->{'short'};
 		my $long = $Properties->{$property}->{'long'};
 		unless ($value =~ m/^$long$/) {
-			addWarning($lineNr, "in property '$property' the value '$value' did not parse pattern '$short'");
+			addError($lineNr, "in property '$property' the value '$value' did not parse pattern '$short'");
 		}
 	} else {
 		addWarning($lineNr, "unsupported property '$property'");
@@ -99,6 +106,7 @@ sub checkDeclarations {
 	for my $declarationNr (1 .. $declarationsTot) {
 		message(" CSS rule $ruleNr", 8);
 		my $lineNr = $declarations->[$declarationNr]->{'lineNr'};
+		$lineNr++;
 		my $property = $declarations->[$declarationNr]->{'property'};
 		my $value = $declarations->[$declarationNr]->{'value'};
 		message("  property: $property", 8);
@@ -237,6 +245,7 @@ sub progName {
 #-------------------------------------------------------------
 sub printAtRules {
 #-------------------------------------------------------------
+	return unless ( exists $Rules->{'at'});
 	my $rules = scalar(@{$Rules->{'at'}}) - 1;
 	message(" $rules AT rules found", 5);
 	if ($Debug >= 8) {
@@ -255,6 +264,7 @@ sub printAtRules {
 #-------------------------------------------------------------
 sub printCssRules {
 #-------------------------------------------------------------
+	return unless ( exists $Rules->{'css'});
 	my $rules = scalar(@{$Rules->{'css'}}) - 1;
 	message(" $rules CSS rules found", 5);
 	if ($Debug >= 8) {
@@ -284,6 +294,22 @@ sub printErrors {
 	
 	return;
 }
+
+#-------------------------------------------------------------
+sub printProblems {
+#-------------------------------------------------------------
+	if ($ProblemNr) {
+		message("** $ProblemNr problems found: ", 2);
+		for my $error ( 1 .. $ProblemNr ) {
+			message($Rules->{'problems'}->[$error], 2);
+		}
+	} else {
+		message("No problems found", 2);
+	}
+	
+	return;
+}
+
 
 #-------------------------------------------------------------
 sub printWarnings {
