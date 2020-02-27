@@ -30,6 +30,6 @@ p.important {
 
 h1:selected,
 h2,
-p[color="red"] {
+p[color = "red"][type="quick] {
 	color: attr(color);	
 }

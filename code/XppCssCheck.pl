@@ -128,21 +128,25 @@ sub checkSelector {
 		my $selectorChecked = $selector;
 		#remove valid pseudo elements
 		$selectorChecked =~ s/::before|::after//gs;
-		if ($selectorChecked =~ m/::/) {
+		if ( $selectorChecked =~ m/::/ ) {
 			addError($lineNr, "illegal '::' separtor found, see: $selector");
 		}
-		if ($selectorChecked =~ s/:before|:after//gs) {
+		if ( $selectorChecked =~ s/:before|:after//gs ) {
 			addWarning($lineNr, "':before' or ':after' are deprecated, use '::before' or '::after' instead, see: '$selector'");
 		}
 		#remove valid pseudo selectors
 		$selectorChecked =~ s/:first-child|:nth-child\(\[d\+n-*]+\)|:first-of-type|nth-of-type\(\[d\+n-*]+\)//gs;
 		#remove namespace :
 		$selectorChecked =~ s/\\://gs;
-		if ($selectorChecked =~ m/:\w+/) {
+		if ( $selectorChecked =~ m/:\w+/ ) {
 			addWarning($lineNr, "unsupported pseudo-selector '$&', see: '$selector'");
 		}
-		if ($selectorChecked =~ m/"]/) {
-			addWarning($lineNr, "do not use double quotes in selectors, see: '$selector'");
+		if ( $selectorChecked =~ m/=\s*[\w]/ ) {
+			addWarning($lineNr, "please double quote attribute values in selectors, see: '$selector'");
+		}
+		if ( $selectorChecked =~ m/=/ and scalar(m/["']/g) % 2)  {
+			addError($lineNr, "close or open quote missing in selectors, see: '$selector'");
+		
 		}
 		$lineNr--;
 	}

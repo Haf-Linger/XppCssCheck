@@ -10,7 +10,7 @@
 		</property>
 		<property>
 			<name>border-radius</name>
-			<value>%length%|inherit</value>
+			<value>0|%length%|inherit</value>
 		</property>
 		<property>
 			<name>border-style</name>
@@ -102,23 +102,23 @@
 		</property>
 		<property>
 			<name>padding</name>
-			<value>(%length%\s+%length%\s+%length%\s+%length%)|inherit</value>
+			<value>(%margin%\s+%margin%\s+%margin%\s+%margin%)|inherit</value>
 		</property>
 		<property>
 			<name>padding-bottom</name>
-			<value>%length%|inherit</value>
+			<value>%margin%</value>
 		</property>
 		<property>
 			<name>padding-left</name>
-			<value>%length%|inherit</value>
+			<value>%margin%</value>
 		</property>
 		<property>
 			<name>padding-right</name>
-			<value>%length%|inherit</value>
+			<value>%margin%</value>
 		</property>
 		<property>
 			<name>padding-top</name>
-			<value>%length%|inherit</value>
+			<value>%margin%</value>
 		</property>
 		<property>
 			<name>page</name>
@@ -134,7 +134,7 @@
 		</property>
 		<property>
 			<name>text-indent</name>
-			<value>%negative%|%length%|%attr%|inherit</value>
+			<value>0|%negative%|%length%|%attr%|inherit</value>
 		</property>
 		<property>
 			<name>text-transform</name>
