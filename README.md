@@ -1,6 +1,6 @@
 # XPP-CSStool
 ## What is this?
-The **XppCssCheck** allows you to syntax check a CSS file. 
+The **XppCssCheck** allows you to syntax check a CSS file used for XPP. 
 
 It will check: 
 * the overall syntax of the file
