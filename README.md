@@ -49,7 +49,7 @@ First make the console active by checking the '_show console_' item.
 Also activate the '_Console Output Filters..._' item.  
 While you are there already fill out the necessary filters. These filter will take care of the color coding of warnings and errors and allow you to double click the problem message and jump to the correct line:   
 ![screenshot Console Output filters](./CaptureFilters.png)   
-_Note:_ the first line is used on my system for running the perl syntax checker, only filter 2 and 3 are used by the XppCssChecker  
+_Note:_ the third line is used on my system for running the perl syntax checker, only filter 1 and 2 are used by the XppCssChecker  
 
 
 The _Plugins/NppExec_ menu will now look like:  
