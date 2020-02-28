@@ -15,8 +15,8 @@ p:before {
 	
 }
 
-p:firsttype {
-	color:         red;
+p:first-of-type {
+	color:         red !important;
 	width:        5.10p;
 }
 
@@ -30,6 +30,6 @@ p.important {
 
 h1:selected,
 h2,
-p[color = "red"][type="quick] {
+p[color = "red"][type="quick"] {
 	color: attr(color);	
 }

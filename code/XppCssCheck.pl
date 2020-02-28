@@ -4,7 +4,8 @@
 #*****************************************************************************
 # V00.01 - 2020/02/16 - start
 # V00.02 - 2020/02/27 - first version
-our $Version = "00.02";
+# V00.03 - 2020/02/28 - good enough for release?
+our $Version = "00.03";
 
 use strict;
 use warnings;
@@ -21,11 +22,9 @@ use Data::Dumper;
 my $Css;
 my $Config;
 my $Debug = 5;
-my $ErrorNr = 0;
 my $Properties;
 my $ProblemNr = 0;
 my $Rules;
-my $WarningNr = 0;
 
 #=============================================================
 #  MAIN
@@ -45,8 +44,6 @@ if ($ProblemNr) {
 #parse css rules properties and values
 scanCssRules();
 
-#printErrors();
-#printWarnings();
 printProblems();
 
 exit();
@@ -59,10 +56,9 @@ sub addError {
 #-------------------------------------------------------------
 	my $lineNr = shift;
 	my $error = shift;
-	#$ErrorNr++;
-	#$Rules->{'errors'}->[$ErrorNr] = "ERROR line: $lineNr - $error";
+	$lineNr = sprintf "%03d", $lineNr;
 	$ProblemNr++;
-	$Rules->{'problems'}->[$ProblemNr] = "ERROR line: $lineNr - $error";
+	$Rules->{'problems'}->[$ProblemNr] = "ERROR   line $lineNr: $error";
 
 	return;
 }
@@ -71,10 +67,9 @@ sub addWarning {
 #-------------------------------------------------------------
 	my $lineNr = shift;
 	my $warning = shift;
-	#$WarningNr++;
-	#$Rules->{'warnings'}->[$WarningNr] = "WARNING line: $lineNr - $warning";
+	$lineNr = sprintf "%03d", $lineNr;
 	$ProblemNr++;
-	$Rules->{'problems'}->[$ProblemNr] = "WARNING line: $lineNr - $warning";
+	$Rules->{'problems'}->[$ProblemNr] = "WARNING line $lineNr: $warning";
 
 	return;
 }
@@ -85,10 +80,18 @@ sub checkPropertyValue {
 	my $lineNr = shift;
 	my $property = shift;
 	my $value = shift;
+	#remove possible !important statement
+	$value =~ s/!important//;
+	$value = stripWS($value);
+	#check property
 	if ( exists $Properties->{$property} ) {
+		#balanced quote check
+		my $quoteCount = () = $value =~ /["']/g;
+		addError($lineNr, "unbalanced quote in the value '$value'") if ( $quoteCount % 2 );
+		#check value against pattern
 		my $short = $Properties->{$property}->{'short'};
 		my $long = $Properties->{$property}->{'long'};
-		unless ($value =~ m/^$long$/) {
+		unless ($value =~ m/^($long)$/) {
 			addError($lineNr, "in property '$property' the value '$value' did not parse pattern '$short'");
 		}
 	} else {
@@ -144,8 +147,9 @@ sub checkSelector {
 		if ( $selectorChecked =~ m/=\s*[\w]/ ) {
 			addWarning($lineNr, "please double quote attribute values in selectors, see: '$selector'");
 		}
-		if ( $selectorChecked =~ m/=/ and scalar(m/["']/g) % 2)  {
-			addError($lineNr, "close or open quote missing in selectors, see: '$selector'");
+		if ( $selectorChecked =~ m/=/ )  {
+			my $quoteCount = () = $selectorChecked =~ /["']/g;
+			addError($lineNr, "unbalanced quote in selectors, see: '$selector'") if ( $quoteCount % 2 );
 		
 		}
 		$lineNr--;
@@ -158,9 +162,8 @@ sub message {
 #-------------------------------------------------------------
 	#level 0 = fatal error
 	#level 1 = progress
-	#level 2 = error
-	#level 3 = warning
-	#level 5 = info
+	#level 2 = error/warning
+	#level 5 = info - default level
 	#level 8 = noisy
 	#level 9 = debug
 	my $mesg = shift;
@@ -285,21 +288,6 @@ sub printCssRules {
 }
 
 #-------------------------------------------------------------
-sub printErrors {
-#-------------------------------------------------------------
-	if ($ErrorNr) {
-		message("** $ErrorNr errors found: ", 2);
-	} else {
-		message(">No errors found")
-	}
-	for my $error ( 1 .. $ErrorNr ) {
-		message($Rules->{'errors'}->[$error], 2);
-	}
-	
-	return;
-}
-
-#-------------------------------------------------------------
 sub printProblems {
 #-------------------------------------------------------------
 	if ($ProblemNr) {
@@ -309,20 +297,6 @@ sub printProblems {
 		}
 	} else {
 		message("No problems found", 2);
-	}
-	
-	return;
-}
-
-
-#-------------------------------------------------------------
-sub printWarnings {
-#-------------------------------------------------------------
-	if ($WarningNr) {
-		message("** $WarningNr warnings found: ", 2);
-	}
-	for my $error ( 1 .. $WarningNr ) {
-		message($Rules->{'warnings'}->[$error], 2);
 	}
 	
 	return;
@@ -453,7 +427,7 @@ sub scanForRules {
 		elsif ( $chr eq "/" ) {
 			my $chrNext = substr $css, $i+1, 1;
 			if ( $chrNext eq '*' ) {
-				$inComment = 1;
+				$inComment = $lineNr;
 				message(" line: $lineNr - start of comment", 7);				
 			} else {
 				$string .= $chr;
@@ -477,7 +451,7 @@ sub scanForRules {
 			$string .= $chr;			
 		}
 		elsif ( $inRule and $chr eq '"' ) {
-			$inQuote = 1;
+			$inQuote = $lineNr;
 			$string .= $chr;					
 		}
 		elsif ( $inQuote ) {
@@ -530,6 +504,8 @@ sub scanForRules {
 			$string .= $chr;
 		}
 	}
+	addError('1', "quote not closed, see rule starting with: " . substr($string, 1, 30)) if ( $inQuote );
+	addError($inComment, "comment not closed") if ( $inComment );
 	
 	return;
 }
