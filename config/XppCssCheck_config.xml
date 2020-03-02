@@ -288,7 +288,7 @@
 	<values>
 		<value>
 			<name>attr</name>
-			<pattern>(attr\(((xpp\\:[\w\s,]+)|(\w+))\))</pattern>
+			<pattern>(attr\(((xpp\\:[\w\s,]+)|([\w\s,]+))\))</pattern>
 		</value>
 		<value>
 			<name>color</name>
@@ -324,7 +324,7 @@
 		</value>
 		<value>
 			<name>margin</name>
-			<pattern>0|%length%|%negative%|%attr%|inherit</pattern>
+			<pattern>(0|%length%|%negative%|%attr%|inherit)</pattern>
 		</value>
 		<value>
 			<name>name</name>

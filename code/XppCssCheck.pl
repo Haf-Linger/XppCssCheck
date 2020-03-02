@@ -143,7 +143,9 @@ sub checkSelector {
 			addWarning($lineNr, "':before' or ':after' are deprecated, use '::before' or '::after' instead, see: '$selector'");
 		}
 		#remove valid pseudo selectors
-		$selectorChecked =~ s/:first-child|:nth-child\([\d\+n\-\*]+\)|:first-of-type|nth-of-type\([\d\+n\-\*]+\)//gs;
+		$selectorChecked =~ s/(:first-child)|(:nth-child\([\d\w\+n\-\*]+\))|(:first-of-type)|(nth-of-type\([\d\w\+n\-\*]+\))//gs;
+		#remove the not() selector
+		$selectorChecked =~ s/:not\([\w:\[\]="'\\]+\)//gs;
 		#remove namespace :
 		$selectorChecked =~ s/\\://gs;
 		if ( $selectorChecked =~ m/:\w+/ ) {
