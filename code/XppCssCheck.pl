@@ -6,7 +6,8 @@
 # V00.02 - 2020/02/27 - first version
 # V00.03 - 2020/02/28 - good enough for release?
 # V00.04 - 2020/03/02 - feature complete
-our $Version = "00.04";
+# V00.05 - 2020/03/02 - some fixes
+our $Version = "00.05";
 
 use strict;
 use warnings;
