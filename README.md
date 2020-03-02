@@ -62,7 +62,7 @@ _Note:_ the Command window might not empty, if that is the case just replace the
 ```
 NPP_SAVE
 cd "$(CURRENT_DIRECTORY)"
-cmd /c  %XYV_EXECS%\procs\util\XppCssCheck.pl  "$(FILE_NAME)" 
+cmd /c  %XYV_EXECS%\procs\util\XppCssCheck.pl  "$(FULL_CURRENT_PATH)" 
 ```
 Press the _Save..._ button and enter a suitable name like _Check CSS_ and press _Save_ , followed by _OK_.
 
