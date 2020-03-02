@@ -278,11 +278,11 @@
 		</property>
 		<property>
 			<name>-xpp-xref-mark</name>
-			<value>%word%|%attr%|none</value>
+			<value>%name%|%attr%|none</value>
 		</property>
 		<property>
 			<name>-xpp-xref-refer</name>
-			<value>%name% %xref-type% %xref-occur% %xref-xreg%</value>
+			<value>(%name%|%attr%|none) (%xref-type%) (%xref-occur%) (%xref-xreg%)</value>
 		</property>
 	</properties>
 	<values>
@@ -328,7 +328,7 @@
 		</value>
 		<value>
 			<name>name</name>
-			<pattern>[A-Za-z][\w-]+</pattern>
+			<pattern>([A-Za-z][\w-]+)</pattern>
 		</value>
 		<value>
 			<name>negative</name>
