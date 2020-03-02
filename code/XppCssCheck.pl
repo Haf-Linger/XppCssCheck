@@ -139,7 +139,7 @@ sub checkSelector {
 			addWarning($lineNr, "':before' or ':after' are deprecated, use '::before' or '::after' instead, see: '$selector'");
 		}
 		#remove valid pseudo selectors
-		$selectorChecked =~ s/:first-child|:nth-child\(\[d\+n-*]+\)|:first-of-type|nth-of-type\(\[d\+n-*]+\)//gs;
+		$selectorChecked =~ s/:first-child|:nth-child\([\d\+n\-\*]+\)|:first-of-type|nth-of-type\([\d\+n\-\*]+\)//gs;
 		#remove namespace :
 		$selectorChecked =~ s/\\://gs;
 		if ( $selectorChecked =~ m/:\w+/ ) {
@@ -376,6 +376,15 @@ sub scanCssDeclarations {
 			$string .= $chr;
 			if (length($string) > 1024) {
 				addWarning($lineNr, "string too long - end quote might be missing");
+			}
+		}
+		elsif ($chr eq '\\' and $inValue) { 
+			my $chrNext = substr $css, $i+1, 1;
+			if ( $chrNext eq ':' ) {
+				$i++;
+				$string .= '\:';
+			} else {
+				$string .= $chr;
 			}
 		}
 		elsif ($chr eq ':' and $inValue) {
