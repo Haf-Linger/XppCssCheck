@@ -42,7 +42,7 @@
 		</property>
 		<property>
 			<name>display</name>
-			<value>none|inline|block|-xpp-line|-xpp-line-suppress|-xpp-block|-xpp-page|-xpp-macro|-xpp-word|-xpp-word-suppress|list-item</value>
+			<value>none|inline|block|-xpp-line|-xpp-line-suppress|-xpp-block|-xpp-page|-xpp-macro|-xpp-word|-xpp-word-suppress|list-item|table-cell|table-row</value>
 		</property>
 		<property>
 			<name>font-family</name>
@@ -130,7 +130,7 @@
 		</property>
 		<property>
 			<name>text-align</name>
-			<value>left|center|right|justify%attr%|-xpp-justify-last-line-left|-xpp-justify-last-line-center|-xpp-justify-last-line-right|-xpp-justify-last-line-left-no-return|-xpp-justify-last-line-center-no-return|-xpp-justify-last-line-right-no-return|-xpp-ragged-left|-xpp-ragged-center|-xpp-ragged-right|-xpp-ragged-left-no-return|-xpp-ragged-center-no-return|-xpp-ragged-right-no-return|-xpp-justify-last-line-appropriate|-xpp-ragged-appropriate|inherit|</value>
+			<value>left|center|right|justify|%attr%|-xpp-justify-last-line-left|-xpp-justify-last-line-center|-xpp-justify-last-line-right|-xpp-justify-last-line-left-no-return|-xpp-justify-last-line-center-no-return|-xpp-justify-last-line-right-no-return|-xpp-ragged-left|-xpp-ragged-center|-xpp-ragged-right|-xpp-ragged-left-no-return|-xpp-ragged-center-no-return|-xpp-ragged-right-no-return|-xpp-justify-last-line-appropriate|-xpp-ragged-appropriate|inherit|</value>
 		</property>
 		<property>
 			<name>text-indent</name>
@@ -278,11 +278,11 @@
 		</property>
 		<property>
 			<name>-xpp-xref-mark</name>
-			<value>%word%|%attr%|none</value>
+			<value>%name%|%attr%|none</value>
 		</property>
 		<property>
 			<name>-xpp-xref-refer</name>
-			<value>%name% %xref-type% %xref-occur% %xref-xreg%</value>
+			<value>(%name%|%attr%|none) (%xref-type%) (%xref-occur%) (%xref-xreg%)</value>
 		</property>
 	</properties>
 	<values>
@@ -328,7 +328,7 @@
 		</value>
 		<value>
 			<name>name</name>
-			<pattern>[A-Za-z][\w-]+</pattern>
+			<pattern>([A-Za-z][\w-]+)</pattern>
 		</value>
 		<value>
 			<name>negative</name>
