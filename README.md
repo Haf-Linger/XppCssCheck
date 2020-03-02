@@ -57,7 +57,8 @@ The _Plugins/NppExec_ menu will now look like:
 
 #### 3. configure 'css check' script
 Now open the menu item  _Plugins/NppExec/Execute..._  
-Copy the following into the Command(s) window:  
+Copy the following into the Command(s) window:
+(note: the Command window might not empty, if that is the case just replace the current content by:)  
 ```
 NPP_SAVE
 cd "$(CURRENT_DIRECTORY)"
