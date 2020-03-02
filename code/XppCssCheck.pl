@@ -93,7 +93,11 @@ sub checkPropertyValue {
 		my $short = $Properties->{$property}->{'short'};
 		my $long = $Properties->{$property}->{'long'};
 		unless ($value =~ m/^($long)$/) {
-			addError($lineNr, "in property '$property' the value '$value' did not parse pattern '$short'");
+			if ($Debug == 9) {
+				addError($lineNr, "in property '$property' the value '$value' did not parse pattern '$long'");			
+			} else {
+				addError($lineNr, "in property '$property' the value '$value' did not parse pattern '$short'");
+			}
 		}
 	} else {
 		addWarning($lineNr, "unsupported property '$property'");
