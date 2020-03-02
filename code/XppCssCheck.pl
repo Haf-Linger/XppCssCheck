@@ -5,7 +5,8 @@
 # V00.01 - 2020/02/16 - start
 # V00.02 - 2020/02/27 - first version
 # V00.03 - 2020/02/28 - good enough for release?
-our $Version = "00.03";
+# V00.04 - 2020/03/02 - feature complete
+our $Version = "00.04";
 
 use strict;
 use warnings;
@@ -194,7 +195,7 @@ sub preFlight {
 	#command line options
 	GetOptions('debug=i' => \$Debug) or printUsage($prog);
 	my $noa = scalar(@ARGV);
-	printUsage() if ( $noa > 1 );
+	printUsage() unless ($noa == 1 );
 	
 	#input file?
 	my $file = shift @ARGV;
@@ -300,6 +301,16 @@ sub printProblems {
 	}
 	
 	return;
+}
+
+#-------------------------------------------------------------
+sub printUsage {
+#-------------------------------------------------------------
+	say " This tool will syntax check your XPP CSS stylesheet";
+	say " Usage: ", progName(), ".pl [-debug 0-9] [css file to check]";
+
+
+	exit(0);
 }
 
 #-------------------------------------------------------------
