@@ -2,13 +2,13 @@
 ## What is this?
 The **XppCssCheck** allows you to syntax check a CSS file used for XPP. 
 
-It will check: 
-* the overall syntax of the file
-* warn if it finds a property that is not supported by XPP
-* error if it finds a value that does not match the pattern for this particular value.
+It will: 
+* check the overall syntax of the file.
+* give a warning if it finds a property that is not supported by XPP.
+* give an error message if it finds a value that does not match the pattern for this particular value.
 * report line numbers where errors or warnings occurred. 
 
-You can run the tool from the command line. In that case the messages are output on the console.
+You can run the tool from the command line. In this case the messages are output on the console.
 
 But it works a lot better when you run the tool within an editor like Notepad++.  
 The errors/warnings will be output in the notepad++ console window.  
@@ -45,7 +45,7 @@ Follow the installation instructions.
 When you have the _NppExec_ installed and working, you need to configure it.  
 Go to the menu _Plugins/NppExec_.
 
-First make the console active by checking the '_show console_' item.  
+First make the console active by checking the '_Show Console_' item.  
 Also activate the '_Console Output Filters..._' item.  
 While you are there already fill out the necessary filters. These filter will take care of the color coding of warnings and errors and allow you to double click the problem message and jump to the correct line:   
 ![screenshot Console Output filters](./CaptureFilters.png)   
@@ -58,10 +58,12 @@ The _Plugins/NppExec_ menu will now look like:
 #### 3. configure 'css check' script
 Now open the menu item  _Plugins/NppExec/Execute..._  
 Copy the following into the Command(s) window:  
-  NPP_SAVE
-  cd "$(CURRENT_DIRECTORY)"
-  cmd /c  %XYV_EXECS%\procs\util\XppCssCheck.pl  "$(FILE_NAME)" 
-Press the _Save..._ button and enter a suitable name like _Check CSS_ and press _Save_ again.
+```
+NPP_SAVE
+cd "$(CURRENT_DIRECTORY)"
+cmd /c  %XYV_EXECS%\procs\util\XppCssCheck.pl  "$(FILE_NAME)" 
+```
+Press the _Save..._ button and enter a suitable name like _Check CSS_ and press _Save_ , followed by _OK_.
 
 Next open the menu item  _Plugins/NppExec/Advanced Options..._   
 Click on the field called _Associated Scripts_ and select the _Check CSS_ script.   
