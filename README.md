@@ -98,7 +98,7 @@ tool: Bart Terryn - XP2 - bart@xp2.be
 config file: Tine Philippart - XP2 - tine@xp2.be
 
 ## Donations
-If you like this tool and you use it in your XPP environment, don't forget the authors.  
+If you like this tool and you use it in your XPP environment, don't forget to reward the authors.  
 Donations are welcome through Paypal (paypal.me/BartTerryn).  
-If you prefer an invoice, just mail me and I will return you a proper invoice for the amount you want to donate.
+If you or your company prefers an invoice, just mail me and I will return you a proper invoice for the amount you want to donate.
 
