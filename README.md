@@ -62,7 +62,7 @@ _Note:_ the Command window might not empty, if that is the case just replace the
 ```
 NPP_SAVE
 cd "$(CURRENT_DIRECTORY)"
-cmd /c  %XYV_EXECS%\procs\util\XppCssCheck.pl  "$(FULL_CURRENT_PATH)" 
+cmd /c  %XYV_EXECS%\perl\bin\perl.exe %XYV_EXECS%\procs\util\XppCssCheck.pl  "$(FULL_CURRENT_PATH)" 
 ```
 Press the _Save..._ button and enter a suitable name like _Check CSS_ and press _Save_ , followed by _OK_.
 
@@ -84,15 +84,21 @@ I selected the _[SHIFT][F2]_ shortcut, but had to remove this shortcut from the 
 
 Et Voila, you are done.
 
-## Limitations
+## Current Limitations
 * no support for Paged Media rules (yet)
 * tool only checks the current open CSS file. It does not chase down nor check imported stylesheets.
+* in the console, you might see some error messages about CMD.EXE not supporting UNC path names (depending on your XPP setup) each time you run the Check CSS script. You can safely ignore those.
+
+## Future plans
+* adding support for Paged Media Rules
+* some property values are nearly impossible to check using a regex pattern. I would like to add the possibility in the config file to call out a perl function in order to validate some of the more complicated values. I have not yet made my mind up if these functions should be defined inside the main program or if they would live in a separate module.
 
 ## Authors
 tool: Bart Terryn - XP2 - bart@xp2.be  
 config file: Tine Philippart - XP2 - tine@xp2.be
 
 ## Donations
-Donations are welcome through Paypal (paypal.me/BartTerryn)  
+If you like this tool and you use it in your XPP environment, don't forget the authors.  
+Donations are welcome through Paypal (paypal.me/BartTerryn).  
 If you prefer an invoice, just mail me and I will return you a proper invoice for the amount you want to donate.
 
