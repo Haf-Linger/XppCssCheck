@@ -300,7 +300,7 @@
 		</value>
 		<value>
 			<name>family-name</name>
-			<pattern>[\w\s-]+</pattern>
+			<pattern>["']?[\w\s-]+["']?</pattern>
 		</value>
 		<value>
 			<name>integer</name>
